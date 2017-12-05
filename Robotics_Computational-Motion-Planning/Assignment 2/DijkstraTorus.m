@@ -23,7 +23,8 @@ cmap = [1 1 1; ...
         1 0 0; ...
         0 0 1; ...
         0 1 0; ...
-        1 1 0];
+        1 1 0;
+        0.5 0.5 0.5];
 
 colormap(cmap);
 
@@ -79,12 +80,49 @@ while true
     
     % Visit each neighbor of the current node and update the map, distances
     % and parent tables appropriately.
-   
-    %%% All of your code should be between the two lines of stars. 
-    % *******************************************************************
     
-    
-    % *******************************************************************
+    ii=0;
+    jj=0;
+    if (i>1 && i<=nrows)
+        ii = i-1;
+        jj = j;
+        update (ii,jj,min_dist+1,current);
+    end
+    if i<=1
+        ii = nrows;
+        jj = j;
+        update (ii,jj,min_dist+1,current);
+    end
+    if (i>=1 && i<nrows)
+        ii = i+1;
+        jj = j;
+        update (ii,jj,min_dist+1,current);
+    end
+    if i>=nrows
+        ii = 1;
+        jj = j;
+        update (ii,jj,min_dist+1,current);
+    end
+    if (j>1 && j<=ncols)
+        jj = j-1;
+        ii = i;
+        update (ii,jj,min_dist+1,current);
+    end
+    if j<=1
+        ii = i;
+        jj = ncols;
+        update (ii,jj,min_dist+1,current);
+    end
+    if (j>=1 && j<ncols)
+        jj =j+1;
+        ii = i;
+        update (ii,jj,min_dist+1,current);
+    end
+    if j>=ncols
+        ii = i;
+        jj = 1;
+        update (ii,jj,min_dist+1,current);
+    end
 end
 
 if (isinf(distances(dest_node)))
@@ -104,5 +142,11 @@ end
             parent(i,j) = p;
         end
     end
-
+    for k = 2:length(route) - 1        
+        map(route(k)) = 7;
+        pause(0.1);
+        image(1.5, 1.5, map);
+        grid on;
+        axis image;
+    end
 end

@@ -10,7 +10,7 @@ function [route,numExpanded] = AStarGrid (input_map, start_coords, dest_coords)
 %    shortest route from start to dest or an empty array if there is no
 %    route. This is a single dimensional vector
 %    numExpanded: Remember to also return the total number of nodes
-%    expanded during your search. Do not count the goal node as an expanded node. 
+%    expanded during your search
 
 % set up color map for display
 % 1 - white - clear cell
@@ -25,7 +25,7 @@ cmap = [1 1 1; ...
     1 0 0; ...
     0 0 1; ...
     0 1 0; ...
-    1 1 0; ...
+    1 1 0;
     0.5 0.5 0.5];
 
 colormap(cmap);
@@ -57,13 +57,13 @@ parent = zeros(nrows,ncols);
 % 
 [X, Y] = meshgrid (1:ncols, 1:nrows);
 
-xd = dest_coords(1);
-yd = dest_coords(2);
+xd = dest_coords(2);
+yd = dest_coords(1);
 
 % Evaluate Heuristic function, H, for each grid cell
 % Manhattan distance
 H = abs(X - xd) + abs(Y - yd);
-H = H';
+
 % Initialize cost arrays
 f = Inf(nrows,ncols);
 g = Inf(nrows,ncols);
@@ -100,7 +100,7 @@ while true
     
     % Update input_map
     map(current) = 3;
-    f(current) = Inf; % remove this node from further consideration
+    %f(current) = Inf; % remove this node from further consideration
     
     % Compute row, column coordinates of current node
     [i, j] = ind2sub(size(f), current);
@@ -110,54 +110,53 @@ while true
     % Visit all of the neighbors around the current node and update the
     % entries in the map, f, g and parent arrays
     %
-    
-    % North cell
-    if (i>1 && i<=nrows)
-        i_nb = i-1;   % Row index of the neighbor cell
-        j_nb = j;   % Column index of the neighbor cell
-        if (map(i_nb,j_nb)~=2 && map(i_nb,j_nb)~=3 && map(i_nb,j_nb)~=5)
-            if g(i_nb,j_nb) > (g(i,j) + (H(i_nb,j_nb)-H(i,j)))
-                g(i_nb,j_nb) = g(i,j) + (H(i_nb,j_nb)-H(i,j));
-                f(i_nb,j_nb) = g(i_nb,j_nb) + H(i_nb,j_nb);
-                map(i_nb,j_nb) = 4;   % Marked as On-List
-                parent(i_nb,j_nb) = current;
+    ii=0;
+    jj=0;
+    if (i>1 && i<=nrows) %% UP
+        ii = i-1;
+        jj = j;
+        if (map(ii,jj)~=2 && map(ii,jj)~=3 && map(ii,jj)~=5)
+            if g(ii,jj) > (g(i,j) + (H(ii,jj)-H(i,j)))
+                g(ii,jj) = g(i,j) + (H(ii,jj)-H(i,j));
+                f(ii,jj) = g(ii,jj) + H(ii,jj);
+                map(ii,jj) = 4;
+                parent(ii,jj) = current;
             end
         end
     end
-    % 
     if (i>=1 && i<nrows) % DOWN
-        i_nb = i+1;
-        j_nb = j;
-        if (map(i_nb,j_nb)~=2 && map(i_nb,j_nb)~=3 && map(i_nb,j_nb)~=5)
-            if g(i_nb,j_nb) > (g(i,j) + (H(i_nb,j_nb)-H(i,j)))
-                g(i_nb,j_nb) = g(i,j) + (H(i_nb,j_nb)-H(i,j));
-                f(i_nb,j_nb) = g(i_nb,j_nb) + H(i_nb,j_nb);
-                map(i_nb,j_nb) = 4;
-                parent(i_nb,j_nb) = current;
+        ii = i+1;
+        jj = j;
+        if (map(ii,jj)~=2 && map(ii,jj)~=3 && map(ii,jj)~=5)
+            if g(ii,jj) > (g(i,j) + (H(ii,jj)-H(i,j)))
+                g(ii,jj) = g(i,j) + (H(ii,jj)-H(i,j));
+                f(ii,jj) = g(ii,jj) + H(ii,jj);
+                map(ii,jj) = 4;
+                parent(ii,jj) = current;
             end
         end
     end
     if (j>1 && j<=ncols) % LEFT
-        j_nb = j-1;
-        i_nb = i;
-        if (map(i_nb,j_nb)~=2 && map(i_nb,j_nb)~=3 && map(i_nb,j_nb)~=5)
-            if g(i_nb,j_nb) > (g(i,j) + (H(i_nb,j_nb)-H(i,j)))
-                g(i_nb,j_nb) = g(i,j) + (H(i_nb,j_nb)-H(i,j));
-                f(i_nb,j_nb) = g(i_nb,j_nb) + H(i_nb,j_nb);
-                map(i_nb,j_nb) = 4;
-                parent(i_nb,j_nb) = current;
+        jj = j-1;
+        ii = i;
+        if (map(ii,jj)~=2 && map(ii,jj)~=3 && map(ii,jj)~=5)
+            if g(ii,jj) > (g(i,j) + (H(ii,jj)-H(i,j)))
+                g(ii,jj) = g(i,j) + (H(ii,jj)-H(i,j));
+                f(ii,jj) = g(ii,jj) + H(ii,jj);
+                map(ii,jj) = 4;
+                parent(ii,jj) = current;
             end
         end
     end
     if (j>=1 && j<ncols) %RIGHT
-        j_nb =j+1;
-        i_nb = i;
-        if (map(i_nb,j_nb)~=2 && map(i_nb,j_nb)~=3 && map(i_nb,j_nb)~=5)
-            if g(i_nb,j_nb) > (g(i,j) + (H(i_nb,j_nb)-H(i,j)))
-                g(i_nb,j_nb) = g(i,j) + (H(i_nb,j_nb)-H(i,j));
-                f(i_nb,j_nb) = g(i_nb,j_nb) + H(i_nb,j_nb);
-                map(i_nb,j_nb) = 4;
-                parent(i_nb,j_nb) = current;
+        jj =j+1;
+        ii = i;
+        if (map(ii,jj)~=2 && map(ii,jj)~=3 && map(ii,jj)~=5)
+            if g(ii,jj) > (g(i,j) + (H(ii,jj)-H(i,j)))
+                g(ii,jj) = g(i,j) + (H(ii,jj)-H(i,j));
+                f(ii,jj) = g(ii,jj) + H(ii,jj);
+                map(ii,jj) = 4;
+                parent(ii,jj) = current;
             end
         end
     end
@@ -165,10 +164,6 @@ while true
     numExpanded = numExpanded + 1;
     
     f(current) = Inf; 
-    
-    
-    
-    
     %*********************************************************************
     
     

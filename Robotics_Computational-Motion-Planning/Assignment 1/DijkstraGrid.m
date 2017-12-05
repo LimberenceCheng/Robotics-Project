@@ -10,7 +10,7 @@ function [route,numExpanded] = DijkstraGrid (input_map, start_coords, dest_coord
 %    shortest route from start to dest or an empty array if there is no
 %    route. This is a single dimensional vector
 %    numExpanded: Remember to also return the total number of nodes
-%    expanded during your search. Do not count the goal node as an expanded node.
+%    expanded during your search
 
 
 % set up color map for display
@@ -26,8 +26,8 @@ cmap = [1 1 1; ...
         1 0 0; ...
         0 0 1; ...
         0 1 0; ...
-        1 1 0; ...
-	0.5 0.5 0.5];
+        1 1 0;
+        0.5 0.5 0.5];
 
 colormap(cmap);
 
@@ -47,8 +47,8 @@ map(input_map)  = 2;   % Mark obstacle cells
 start_node = sub2ind(size(map), start_coords(1), start_coords(2));
 dest_node  = sub2ind(size(map), dest_coords(1),  dest_coords(2));
 
-map(start_node) = 5;   % Mark start cell
-map(dest_node)  = 6;   % Mark dest cell
+map(start_node) = 5;
+map(dest_node)  = 6;
 
 % Initialize distance array
 distanceFromStart = Inf(nrows,ncols);
@@ -93,13 +93,51 @@ while true
     
    % ********************************************************************* 
     % YOUR CODE BETWEEN THESE LINES OF STARS
+
+    ii=0;
+    jj=0;
+    if (i>1 && i<=nrows)
+        ii = i-1;
+        jj = j;
+        if (map(ii,jj)~=2 && map(ii,jj)~=3 && map(ii,jj)~=5)
+            map(ii,jj) = 4;
+            parent(ii,jj) = current;
+            distanceFromStart(ii,jj) = min_dist+1;
+        end
+    end
+    if (i>=1 && i<nrows)
+        ii = i+1;
+        jj = j;
+        if (map(ii,jj)~=2 && map(ii,jj)~=3 && map(ii,jj)~=5)
+            map(ii,jj) = 4;
+            parent(ii,jj) = current;
+            distanceFromStart(ii,jj) = min_dist+1;
+        end
+    end
+    if (j>1 && j<=ncols)
+        jj = j-1;
+        ii = i;
+        if (map(ii,jj)~=2 && map(ii,jj)~=3 && map(ii,jj)~=5)
+            map(ii,jj) = 4;
+            parent(ii,jj) = current;
+            distanceFromStart(ii,jj) = min_dist+1;
+        end
+    end
+    if (j>=1 && j<ncols)
+        jj =j+1;
+        ii = i;
+        if (map(ii,jj)~=2 && map(ii,jj)~=3 && map(ii,jj)~=5)
+            map(ii,jj) = 4;
+            parent(ii,jj) = current;
+            distanceFromStart(ii,jj) = min_dist+1;
+        end
+    end
     
+    numExpanded = numExpanded + 1;
+
     % Visit each neighbor of the current node and update the map, distances
     % and parent tables appropriately.
-    
-    
-    
-    
+
     %*********************************************************************
 
 end

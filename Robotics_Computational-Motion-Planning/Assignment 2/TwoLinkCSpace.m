@@ -55,6 +55,8 @@ for i = 1:nrows
 end
 
 %% Plot configuration space
+
+
 subplot (1,2,2);
 
 axis equal;
@@ -78,14 +80,12 @@ title ('Configuration Space');
 figure(2);
 
 % You should experiment by changing these coordinates
-start_coords = [40, 80];
-end_coords = [100, 110];
+% start_coords = [40, 80];
+% end_coords = [100, 110];
+start_coords=[80,20];
+end_coords=[100,160];
 
 % Find a route between the start and end nodes
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% YOU CAN COMMENT LINE 61-64 in the DijkstraTorus.m to compute the route
-% without drawing the map every iteration!
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 route = DijkstraTorus (cspace, start_coords, end_coords);
 
 %% Animate the route
@@ -96,7 +96,6 @@ y = theta2_range(i);
 x = theta1_range(j);
 
 % Plot point in configuration space
-figure(1);
 subplot(1,2,2);
 hold on;
 h = plot (x(1), y(1), 'ro', 'MarkerSize', 10, 'MarkerFaceColor', 'red');
